@@ -7,6 +7,8 @@ namespace Ui {
 class QtTestPhylogenyRdialog;
 }
 
+namespace ribi {
+
 class QtTestPhylogenyRdialog : public QDialog
 {
   Q_OBJECT
@@ -14,8 +16,10 @@ class QtTestPhylogenyRdialog : public QDialog
 public:
   explicit QtTestPhylogenyRdialog(QWidget *parent = 0);
   QtTestPhylogenyRdialog(const QtTestPhylogenyRdialog&) = delete;
+  QtTestPhylogenyRdialog(const QtTestPhylogenyRdialog&&) = delete;
   QtTestPhylogenyRdialog& operator=(const QtTestPhylogenyRdialog&) = delete;
-  ~QtTestPhylogenyRdialog();
+  QtTestPhylogenyRdialog& operator=(const QtTestPhylogenyRdialog&&) = delete;
+  ~QtTestPhylogenyRdialog() noexcept;
   std::string GetNewick() const noexcept;
 
 private slots:
@@ -32,4 +36,5 @@ private:
   void DisplayNewickToLttPlotExtant(const std::string& newick);
 };
 
+} //~namespace ribi
 #endif // QTTESTPHYLOGENYRDIALOG_H

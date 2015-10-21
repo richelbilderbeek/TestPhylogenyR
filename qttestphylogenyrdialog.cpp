@@ -7,7 +7,7 @@
 #include "phylogeny_r.h"
 #include "ui_qttestphylogenyrdialog.h"
 
-QtTestPhylogenyRdialog::QtTestPhylogenyRdialog(QWidget *parent) :
+ribi::QtTestPhylogenyRdialog::QtTestPhylogenyRdialog(QWidget *parent) :
   QDialog(parent),
   ui(new Ui::QtTestPhylogenyRdialog)
 {
@@ -20,18 +20,18 @@ QtTestPhylogenyRdialog::QtTestPhylogenyRdialog(QWidget *parent) :
   }
 }
 
-QtTestPhylogenyRdialog::~QtTestPhylogenyRdialog()
+ribi::QtTestPhylogenyRdialog::~QtTestPhylogenyRdialog()noexcept
 {
   delete ui;
 }
 
-void QtTestPhylogenyRdialog::DisplayNewickExtant(const std::string& newick)
+void ribi::QtTestPhylogenyRdialog::DisplayNewickExtant(const std::string& newick)
 {
-  const std::string newick_extant{PhylogenyR().DropExtict(newick)};
+  const std::string newick_extant{PhylogenyR().DropExtinct(newick)};
   ui->edit_extant->setText(newick_extant.c_str());
 }
 
-void QtTestPhylogenyRdialog::DisplayNewickToPhylogenyPng(const std::string& newick)
+void ribi::QtTestPhylogenyRdialog::DisplayNewickToPhylogenyPng(const std::string& newick)
 {
   QLabel * const label{ui->image_NewickToPhylogenyPng};
   const std::string temp_png_filename{
@@ -55,7 +55,7 @@ void QtTestPhylogenyRdialog::DisplayNewickToPhylogenyPng(const std::string& newi
   }
 }
 
-void QtTestPhylogenyRdialog::DisplayNewickToPhylogenyExtantPng(
+void ribi::QtTestPhylogenyRdialog::DisplayNewickToPhylogenyExtantPng(
   const std::string& newick)
 {
   QLabel * const label{ui->image_NewickToPhylogenyExtant};
@@ -65,10 +65,9 @@ void QtTestPhylogenyRdialog::DisplayNewickToPhylogenyExtantPng(
   try
   {
     PhylogenyR().NewickToPhylogeny(
-      newick,
+      PhylogenyR().DropExtinct(newick),
       temp_png_filename,
-      PhylogenyR::GraphicsFormat::png,
-      false
+      PhylogenyR::GraphicsFormat::png
     );
     label->setPixmap(QPixmap(temp_png_filename.c_str()));
 
@@ -81,7 +80,7 @@ void QtTestPhylogenyRdialog::DisplayNewickToPhylogenyExtantPng(
   }
 }
 
-void QtTestPhylogenyRdialog::DisplayNewickToLttPlot(const std::string& newick)
+void ribi::QtTestPhylogenyRdialog::DisplayNewickToLttPlot(const std::string& newick)
 {
   QLabel * const label{ui->image_NewickToLttPlot};
   const std::string temp_png_filename{
@@ -103,7 +102,7 @@ void QtTestPhylogenyRdialog::DisplayNewickToLttPlot(const std::string& newick)
   }
 }
 
-void QtTestPhylogenyRdialog::DisplayNewickToLttPlotExtant(const std::string& newick)
+void ribi::QtTestPhylogenyRdialog::DisplayNewickToLttPlotExtant(const std::string& newick)
 {
   QLabel * const label{ui->image_NewickToLttPlotExtant};
   //NewickToLttPlot of extant species
@@ -113,7 +112,11 @@ void QtTestPhylogenyRdialog::DisplayNewickToLttPlotExtant(const std::string& new
     };
     try
     {
-      PhylogenyR().NewickToLttPlot(newick,temp_png_filename,PhylogenyR::GraphicsFormat::png,false);
+      PhylogenyR().NewickToLttPlot(
+        PhylogenyR().DropExtinct(newick),
+        temp_png_filename,
+        PhylogenyR::GraphicsFormat::png
+      );
       label->setPixmap(QPixmap(temp_png_filename.c_str()));
       ribi::fileio::FileIo().DeleteFile(temp_png_filename);
     }
@@ -124,12 +127,12 @@ void QtTestPhylogenyRdialog::DisplayNewickToLttPlotExtant(const std::string& new
   }
 }
 
-std::string QtTestPhylogenyRdialog::GetNewick() const noexcept
+std::string ribi::QtTestPhylogenyRdialog::GetNewick() const noexcept
 {
   return ui->edit_newick->text().toStdString();
 }
 
-void QtTestPhylogenyRdialog::on_button_show_clicked()
+void ribi::QtTestPhylogenyRdialog::on_button_show_clicked()
 {
   const std::string newick{GetNewick()};
   DisplayNewickExtant(newick);
